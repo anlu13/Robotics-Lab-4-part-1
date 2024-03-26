@@ -3,6 +3,12 @@ from cmap import *
 from gui import *
 from utils import *
 
+import cozmo
+import math
+import sys
+import time
+import random
+
 MAX_NODES = 20000
 
 ################################################################################
@@ -53,11 +59,29 @@ def RRT(cmap, start):
         # 3. Limit the distance RRT can move
         # 4. Add one path from nearest node to random node
         #
-        rand_node = None
+        # rand_node = None
+        # nearest_node = None
+        # pass
+
+        #1
+        rand_node = CozMap.get_random_valid_node()
+
+        #2
         nearest_node = None
-        pass
+        nodes = cmap.get_nodes()
+        min_dist = math.inf
+
+        #3
+        for node in nodes:
+            if get_dist(rand_node, node) < min_dist:
+                nearest_node = node
+                min_dist = get_dist(rand_node, node)
+
+        rand_node = step_from_to(nearest_node, rand_node)
+
         ########################################################################
         sleep(0.01)
+        #4
         cmap.add_path(nearest_node, rand_node)
         if cmap.is_solved():
             break
