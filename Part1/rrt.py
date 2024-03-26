@@ -2,6 +2,7 @@ from time import sleep
 from cmap import *
 from gui import *
 from utils import *
+import random
 
 MAX_NODES = 20000
 
@@ -22,11 +23,16 @@ def step_from_to(node0, node1, limit=75):
     #    limit units at most
     # 3. Hint: please consider using np.arctan2 function to get vector angle
     # 4. Note: remember always return a Node object
-    return node1
     ############################################################################
+    dist = get_dist(node0, node1)
+    if dist > limit:
+        angle = np.arctan2(node0.y - node1.y, node0.x, node1.x)
+        x = limit * np.cos(angle) + node0.x
+        y = limit * np.sin(angle) + node0.y
+        return Node((x, y))
+    return node1
 
-
-def node_generator(cmap):
+def node_generator(cmap: CozMap):
     rand_node = None
     ############################################################################
     # TODO: please enter your code below.
@@ -34,8 +40,12 @@ def node_generator(cmap):
     # 2. Use CozMap.is_inbound and CozMap.is_inside_obstacles to determine the
     #    legitimacy of the random node.
     # 3. Note: remember always return a Node object
-    pass
     ############################################################################
+    width = cmap.width
+    height = cmap.height
+    valid = False
+    while(not valid):
+        rand_node = Node()
     return rand_node
 
 
@@ -43,6 +53,8 @@ def RRT(cmap, start):
     cmap.add_node(start)
 
     map_width, map_height = cmap.get_size()
+
+    random.seed(69)
 
     while (cmap.get_num_nodes() < MAX_NODES):
         ########################################################################
