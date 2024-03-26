@@ -45,7 +45,9 @@ def node_generator(cmap: CozMap):
     height = cmap.height
     valid = False
     while(not valid):
-        rand_node = Node()
+        rand_node = Node((random.randint(0, width), random.randint(0, height)))
+        if(cmap.is_inbound(rand_node) and not cmap.is_inside_obstacles(rand_node)):
+            valid = True
     return rand_node
 
 
