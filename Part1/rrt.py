@@ -3,6 +3,7 @@ from cmap import *
 from gui import *
 from utils import *
 import random
+import math
 
 MAX_NODES = 20000
 
@@ -26,7 +27,7 @@ def step_from_to(node0, node1, limit=75):
     ############################################################################
     dist = get_dist(node0, node1)
     if dist > limit:
-        angle = np.arctan2(node0.y - node1.y, node0.x, node1.x)
+        angle = np.arctan2(node1.y - node0.y, node1.x - node0.x)
         x = limit * np.cos(angle) + node0.x
         y = limit * np.sin(angle) + node0.y
         return Node((x, y))
@@ -67,10 +68,21 @@ def RRT(cmap, start):
         # 3. Limit the distance RRT can move
         # 4. Add one path from nearest node to random node
         #
-        rand_node = None
-        nearest_node = None
-        pass
         ########################################################################
+        #1
+        rand_node = cmap.get_random_valid_node()
+
+        #2
+        nearest_node = None
+        nodes = cmap.get_nodes()
+        min_dist = math.inf
+        for node in nodes:
+            if get_dist(rand_node, node) < min_dist:
+                nearest_node = node
+                min_dist = get_dist(rand_node, node)
+
+        #3
+        rand_node = step_from_to(nearest_node, rand_node)
         sleep(0.01)
         cmap.add_path(nearest_node, rand_node)
         if cmap.is_solved():
