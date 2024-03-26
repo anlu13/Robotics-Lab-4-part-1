@@ -70,13 +70,12 @@ def RRT(cmap, start):
         nearest_node = None
         nodes = cmap.get_nodes()
         min_dist = math.inf
-
-        #3
         for node in nodes:
             if get_dist(rand_node, node) < min_dist:
                 nearest_node = node
                 min_dist = get_dist(rand_node, node)
 
+        #3
         rand_node = step_from_to(nearest_node, rand_node)
 
         ########################################################################
